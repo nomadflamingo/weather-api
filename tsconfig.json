@@ -115,6 +115,7 @@
       "@services/*": ["services/*"],
       "@controllers/*": ["controllers/*"],
       "@routes/*": ["routes/*"],
+      "@models/*": ["models/*"]
     }
   }
 }

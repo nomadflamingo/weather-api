@@ -1,5 +1,6 @@
 // src/controllers/weather.controller.ts
 import { Request, Response } from 'express';
+import { Weather } from '@models/weather.model';
 
 export const getWeather = async (req: Request, res: Response) => {
   const city = req.query.city as string;
@@ -11,7 +12,7 @@ export const getWeather = async (req: Request, res: Response) => {
   try {
     // TODO: Integrate real weather API (e.g., WeatherAPI.com)
     // TODO: add 404 for city not found
-    const mockWeather = {
+    const mockWeather: Weather = {
       temperature: 20,
       humidity: 60,
       description: 'Partly cloudy',
