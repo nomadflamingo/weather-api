@@ -113,7 +113,8 @@
     "paths": {
       "@lib/*": ["lib/*"],
       "@services/*": ["services/*"],
-      "@controllers/*": ["controllers/*"]
+      "@controllers/*": ["controllers/*"],
+      "@routes/*": ["routes/*"],
     }
   }
 }
