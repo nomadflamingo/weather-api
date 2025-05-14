@@ -1,7 +1,12 @@
 // src/controllers/subscription.controller.ts
 import { Request, Response } from 'express';
-import prisma from '../lib/prisma';
-import { v4 as uuidv4 } from 'uuid';
+import {
+  findSubscriptionByEmail,
+  createSubscription,
+  findSubscriptionByToken,
+  confirmSubscriptionByToken,
+  deleteSubscriptionByToken,
+} from '@services/subscription.service';
 
 export const subscribe = async (req: Request, res: Response) => {
   const { email, city, frequency } = req.body;
@@ -11,23 +16,13 @@ export const subscribe = async (req: Request, res: Response) => {
   }
 
   try {
-    const existing = await prisma.subscription.findUnique({ where: { email } });
+    const existing = await findSubscriptionByEmail(email);
 
     if (existing) {
       return res.status(409).json({ error: 'Email already subscribed' });
     }
 
-    const token = uuidv4();
-
-    await prisma.subscription.create({
-      data: {
-        email,
-        city,
-        frequency,
-        confirmed: false,
-        token,
-      },
-    });
+    const token = await createSubscription(email, city, frequency);
 
     // TODO: Send confirmation email with token
     return res.status(200).json({ message: 'Subscription created. Confirmation email sent.' });
@@ -45,16 +40,13 @@ export const confirmSubscription = async (req: Request, res: Response) => {
   }
 
   try {
-    const subscription = await prisma.subscription.findUnique({ where: { token } });
+    const subscription = await findSubscriptionByToken(token);
 
     if (!subscription) {
       return res.status(404).json({ error: 'Invalid or expired token' });
     }
 
-    await prisma.subscription.update({
-      where: { token },
-      data: { confirmed: true },
-    });
+    await confirmSubscriptionByToken(token);
 
     return res.status(200).json({ message: 'Subscription confirmed' });
   } catch (error) {
@@ -71,13 +63,13 @@ export const unsubscribe = async (req: Request, res: Response) => {
   }
 
   try {
-    const subscription = await prisma.subscription.findUnique({ where: { token } });
+    const subscription = await findSubscriptionByToken(token);
 
     if (!subscription) {
       return res.status(404).json({ error: 'Invalid or expired token' });
     }
 
-    await prisma.subscription.delete({ where: { token } });
+    await deleteSubscriptionByToken(token);
 
     return res.status(200).json({ message: 'Unsubscribed successfully' });
   } catch (error) {
