@@ -33,19 +33,18 @@ export const getWeatherForCity = async (city: string): Promise<Weather> => {
     if (axios.isAxiosError(error)) {
       const data = error.response?.data as WeatherAPIErrorResponse | undefined;
 
-      const message =
-        data?.error?.message ?? 'Failed to fetch weather from WeatherAPI';
+      if (data?.error.code === 1006) {
+        console.error('City not found:', data);
+        throw new ExternalApiError(404, 'City not found');
+      }
+
+      const message = data?.error?.message ?? 'Failed to fetch weather from WeatherAPI';
       const statusCode = error.response?.status || 500;
 
       console.error('WeatherAPI error:', data);
-
       throw new ExternalApiError(statusCode, message);
-    } else if (error instanceof Error) {
-      console.error('Generic error:', error.message);
-      throw error;
-    } else {
-      console.error('Unexpected error:', error);
-      throw new Error('Unknown error occurred while fetching weather');
     }
+
+    throw new Error('Unknown error occurred while fetching weather');
   }
 };

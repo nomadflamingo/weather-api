@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import weatherRoutes from '@routes/weather.routes';
 import subscriptionRoutes from '@routes/subscription.routes';
+import { errorHandler } from '@middlewares/error.middleware';
 
 dotenv.config();
 
@@ -14,6 +15,8 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use('/api/weather', weatherRoutes);
 app.use('/api', subscriptionRoutes); // subscribe, confirm, unsubscribe
+
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
