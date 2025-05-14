@@ -1,0 +1,92 @@
+{
+  "info": {
+    "name": "Weather Forecast API",
+    "description": "Weather API application that allows users to subscribe to weather updates for their city.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "item": [
+    {
+      "name": "Get Weather",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/weather?city={{city}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "weather"],
+          "query": [
+            {
+              "key": "city",
+              "value": "{{city}}",
+              "description": "City name for weather forecast"
+            }
+          ]
+        },
+        "description": "Returns the current weather forecast for the specified city."
+      },
+      "response": []
+    },
+    {
+      "name": "Subscribe",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/x-www-form-urlencoded"
+          }
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            { "key": "email", "value": "{{email}}", "type": "text" },
+            { "key": "city", "value": "{{city}}", "type": "text" },
+            { "key": "frequency", "value": "{{frequency}}", "type": "text" }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/api/subscribe",
+          "host": ["{{base_url}}"],
+          "path": ["api", "subscribe"]
+        },
+        "description": "Subscribe an email to receive weather updates."
+      },
+      "response": []
+    },
+    {
+      "name": "Confirm Subscription",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/confirm/{{token}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "confirm", "{{token}}"]
+        },
+        "description": "Confirms a subscription using the token."
+      },
+      "response": []
+    },
+    {
+      "name": "Unsubscribe",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/unsubscribe/{{token}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "unsubscribe", "{{token}}"]
+        },
+        "description": "Unsubscribes using the token."
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    { "key": "city", "value": "Kyiv" },
+    { "key": "email", "value": "test@example.com" },
+    { "key": "frequency", "value": "daily" },
+    { "key": "token", "value": "sample-token-123" }
+  ]
+}
