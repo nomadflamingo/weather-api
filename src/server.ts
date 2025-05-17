@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import weatherRoutes from '@routes/weather.routes';
 import subscriptionRoutes from '@routes/subscription.routes';
 import { errorHandler } from '@middlewares/error.middleware';
+import { startWeatherEmailJob } from '@jobs/weather-email.job';
 
 dotenv.config();
 
@@ -20,4 +21,5 @@ app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
+  startWeatherEmailJob();
 });

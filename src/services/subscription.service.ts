@@ -36,3 +36,9 @@ export const confirmSubscriptionByToken = async (token: string): Promise<void> =
 export const deleteSubscriptionByToken = async (token: string): Promise<void> => {
   await prisma.subscription.delete({ where: { token } });
 };
+
+export const getAllConfirmedSubscriptions = async () => {
+  return prisma.subscription.findMany({
+    where: { confirmed: true },
+  });
+};

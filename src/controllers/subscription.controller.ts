@@ -8,7 +8,7 @@ import {
   deleteSubscriptionByToken,
 } from '@services/subscription.service';
 import { buildConfirmUrl, buildUnsubscribeUrl } from '@lib/url';
-import { sendConfirmationEmail, sendUnsubscribeEmail } from '@services/mail.service';
+import { sendConfirmationEmail, sendSubscriptionConfirmedEmail } from '@services/mail.service';
 
 export const subscribe = async (req: Request, res: Response) => {
   const { email, city, frequency } = req.body;
@@ -29,7 +29,7 @@ export const subscribe = async (req: Request, res: Response) => {
   const token = await createSubscription(email, city, frequency);
 
   // Send confirmation email
-  const confirmUrl = buildConfirmUrl(req.get('host')!, req.protocol, token);
+  const confirmUrl = buildConfirmUrl(token);
   await sendConfirmationEmail(email, confirmUrl);
 
   return res.status(200).json({ message: 'Subscription created. Confirmation email sent.' });
@@ -54,8 +54,8 @@ export const confirmSubscription = async (req: Request, res: Response) => {
   await confirmSubscriptionByToken(token);
 
   // Send an unsubscribe email to the user
-  const unsubscribeUrl = buildUnsubscribeUrl(req.get('host')!, req.protocol, token);
-  await sendUnsubscribeEmail(subscription.email, unsubscribeUrl);
+  const unsubscribeUrl = buildUnsubscribeUrl(token);
+  await sendSubscriptionConfirmedEmail(subscription.email, unsubscribeUrl);
 
   return res.status(200).json({ message: 'Subscription confirmed successfully' });
 };

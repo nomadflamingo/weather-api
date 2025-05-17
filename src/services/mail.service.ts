@@ -1,3 +1,4 @@
+import { Weather } from '@models/weather.model';
 import nodemailer from 'nodemailer';
 import { createTestAccount } from 'nodemailer';
 
@@ -8,10 +9,10 @@ export const initEmailTransporter = async () => {
 
   const testAccount = await createTestAccount();
 
-  console.log('Ethereal test account created:');
-  console.log('Login:', testAccount.user);
-  console.log('Password:', testAccount.pass);
-  console.log('View at:', `https://ethereal.email/messages`);
+  // console.log('Ethereal test account created:');
+  // console.log('Login:', testAccount.user);
+  // console.log('Password:', testAccount.pass);
+  // console.log('View at:', `https://ethereal.email/messages`);
 
   transporter = nodemailer.createTransport({
     host: 'smtp.ethereal.email',
@@ -45,14 +46,14 @@ export const sendConfirmationEmail = async (
     `,
   });
 
-  console.log('✅ Email sent:', info.messageId);
-  console.log('🔍 Preview:', nodemailer.getTestMessageUrl(info));
+  console.log('Comfirmation email sent:', info.messageId);
+  console.log('Preview:', nodemailer.getTestMessageUrl(info));
 };
 
 /**
  * Sends an email with an unsubscribe link.
  */
-export const sendUnsubscribeEmail = async (
+export const sendSubscriptionConfirmedEmail = async (
   email: string,
   unsubscribeUrl: string
 ): Promise<void> => {
@@ -64,16 +65,40 @@ export const sendUnsubscribeEmail = async (
     subject: 'Subscription Confirmed - Manage Your Preferences',
     html: `
       <p>Your weather subscription has been confirmed.</p>
-      <p>If you ever want to unsubscribe, click the link below:</p>
-      <a href="${unsubscribeUrl}">${unsubscribeUrl}</a>
+      <p><a href="${unsubscribeUrl}">Unsubscribe</a> if you don't want to receive updates.</p>
     `,
   });
 
-  console.log('📤 Unsubscribe email sent:', info.messageId);
-  console.log('🔍 Preview URL:', nodemailer.getTestMessageUrl(info));
+  console.log('Subscription confirmed email sent:', info.messageId);
+  console.log('Preview URL:', nodemailer.getTestMessageUrl(info));
 };
 
+/**
+ * Sends a weather update email.
+ */
+export const sendWeatherUpdateEmail = async (
+  email: string,
+  city: string,
+  weather: Weather,
+  unsubscribeUrl: string,
+): Promise<void> => {
+  await initEmailTransporter();
 
-// const confirmedSubscriptions = await prisma.subscription.findMany({
-//   where: { confirmed: true },
-// });
+  const info = await transporter.sendMail({
+    from: process.env.EMAIL_FROM,
+    to: email,
+    subject: `Weather update for ${city}`,
+    html: `
+      <p>Current weather in <b>${city}</b>:</p>
+      <ul>
+        <li><b>Temperature:</b> ${weather.temperature}°C</li>
+        <li><b>Humidity:</b> ${weather.humidity}%</li>
+        <li><b>Description:</b> ${weather.description}</li>
+      </ul>
+      <p><a href="${unsubscribeUrl}">Unsubscribe</a> if you don't want to receive updates.</p>
+    `,
+  });
+
+  console.log('Weather update sent:', info.messageId);
+  console.log('Preview URL:', nodemailer.getTestMessageUrl(info));
+};

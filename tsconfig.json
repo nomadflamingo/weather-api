@@ -116,7 +116,8 @@
       "@controllers/*": ["controllers/*"],
       "@routes/*": ["routes/*"],
       "@models/*": ["models/*"],
-      "@middlewares/*": ["middlewares/*"]
+      "@middlewares/*": ["middlewares/*"],
+      "@jobs/*": ["jobs/*"]
     }
   }
 }
