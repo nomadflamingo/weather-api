@@ -15,7 +15,7 @@ RUN npm install
 COPY . .
 
 # Generate prisma
-RUN npx prisma generate
+RUN npm run generate
 
 # Compile
 RUN npm run build
@@ -33,13 +33,16 @@ WORKDIR /app
 # copy tsconfig so tsconfig-paths can load aliases
 COPY tsconfig.json ./
 
+# copy docs
+COPY docs ./docs
+
 # Copy only necessary build artifacts
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
 
-# Expose API port (optional, useful for docs/docker-compose)
+# Expose API port
 EXPOSE 3000
 
 # Command to run your app
