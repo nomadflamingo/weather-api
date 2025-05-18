@@ -11,12 +11,15 @@ export const errorHandler = (
   console.error('Global error handler:', err);
 
   if (err instanceof ExternalApiError) {
-    return res.status(err.statusCode).json({ error: err.message });
+    res.status(err.statusCode).json({ error: err.message });
+    return;
   }
 
   if (err instanceof Error) {
-    return res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err.message });
+    return;
   }
 
-  return res.status(500).json({ error: 'Unexpected error occurred' });
+  res.status(500).json({ error: 'Unexpected error occurred' });
+  return;
 };

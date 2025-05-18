@@ -10,12 +10,14 @@ export const getWeather = async (req: Request, res: Response) => {
   const city = req.query.city as string;
 
   if (!city) {
-    return res.status(400).json({ error: 'City is required' });
+    res.status(400).json({ error: 'City is required' });
+    return;
   }
 
   try {
     const weather = await getWeatherForCity(city);
-    return res.status(200).json(weather);
+    res.status(200).json(weather);
+    return;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
       const data = error.response?.data as WeatherAPIErrorResponse | undefined;
