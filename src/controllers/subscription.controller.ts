@@ -13,14 +13,17 @@ import { sendConfirmationEmail, sendSubscriptionConfirmedEmail } from '@services
 export const subscribe = async (req: Request, res: Response) => {
   const { email, city, frequency } = req.body;
 
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
   // Validate input
-  if (!email || !city || !frequency) {
+  // TODO: replace with enums for frequency
+  // TODO: split validation into a separate function
+  if (!email || !city || !frequency || !['hourly', 'daily'].includes(frequency) || !emailRegex.test(email)) {
     return res.status(400).json({ error: 'Invalid input' });
   }
 
   // Check if the email is already subscribed
   const existing = await findSubscriptionByEmail(email);
-
   if (existing) {
     return res.status(409).json({ error: 'Email already subscribed' });
   }
@@ -29,8 +32,15 @@ export const subscribe = async (req: Request, res: Response) => {
   const token = await createSubscription(email, city, frequency);
 
   // Send confirmation email
-  const confirmUrl = buildConfirmUrl(token);
-  await sendConfirmationEmail(email, confirmUrl);
+  try {
+    const confirmUrl = buildConfirmUrl(token);
+    await sendConfirmationEmail(email, confirmUrl);
+
+  } catch {
+    // revert subscription creation if email fails
+    await deleteSubscriptionByToken(token);
+    return res.status(500).json({ error: 'Failed to send confirmation email' });
+  }
 
   return res.status(200).json({ message: 'Subscription created. Confirmation email sent.' });
 };

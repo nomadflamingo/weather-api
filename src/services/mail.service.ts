@@ -7,21 +7,35 @@ let transporter: nodemailer.Transporter;
 export const initEmailTransporter = async () => {
   if (transporter) return;
 
-  const testAccount = await createTestAccount();
-
   // console.log('Ethereal test account created:');
   // console.log('Login:', testAccount.user);
   // console.log('Password:', testAccount.pass);
   // console.log('View at:', `https://ethereal.email/messages`);
-
-  transporter = nodemailer.createTransport({
-    host: 'smtp.ethereal.email',
-    port: 587,
-    auth: {
-      user: testAccount.user,
-      pass: testAccount.pass,
-    },
-  });
+  
+  if (!process.env.NODE_ENV || process.env.NODE_ENV === 'production') {
+    // Use Gmail for production
+    transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      auth: {
+        type: 'OAuth2',
+        user: process.env.EMAIL_USER,
+        clientId: process.env.GMAIL_CLIENT_ID,
+        clientSecret: process.env.GMAIL_CLIENT_SECRET,
+        refreshToken: process.env.GMAIL_REFRESH_TOKEN,
+      },
+    });
+  } else {
+    // Use Ethereal for testing
+    const testAccount = await createTestAccount();
+    transporter = nodemailer.createTransport({
+      host: 'smtp.ethereal.email',
+      port: 587,
+      auth: {
+        user: testAccount.user,
+        pass: testAccount.pass,
+      },
+    });
+  }
 };
 
 /**
