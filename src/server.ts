@@ -7,12 +7,14 @@ import { startWeatherEmailJob } from '@jobs/weather-email.job';
 import { rateLimiter } from '@middlewares/rate-limiter.middleware';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
+import cors from 'cors';
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
