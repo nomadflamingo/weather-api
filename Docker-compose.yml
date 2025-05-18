@@ -1,0 +1,34 @@
+services:
+  db:
+    image: postgres:latest
+    restart: unless-stopped
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: weather_user
+      POSTGRES_PASSWORD: weather_pass
+      POSTGRES_DB: weather_db
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    
+  weather-api:
+    build: .
+    depends_on:
+      - db
+    ports:
+      - '3000:3000'
+    env_file:
+      - .env
+    command: >
+      sh -c "
+        until pg_isready -h db -p 5432; do
+          echo 'Waiting for postgres…';
+          sleep 1;
+        done &&
+        npm run deploy &&
+        npm run start
+      "
+
+
+volumes:
+  pgdata:
