@@ -8,15 +8,16 @@ export default tseslint.config(
   {
     ignores: [
       "src/generated/**",
+      "dist/**"
     ],
   },
   {
     plugins: {
-      '@stylistic': stylistic
+      '@stylistic': stylistic,
     },
     rules: {
       '@stylistic/indent': ['error', 2],
-      '@stylistic/semi': ['warn', 'always']
+      '@stylistic/semi': ['warn', 'always'],
     },
   },
   eslint.configs.recommended,
