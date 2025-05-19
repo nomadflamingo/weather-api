@@ -26,11 +26,10 @@ https://weather-api-boxh.onrender.com
 You can use the "Try it out" buttons to call live endpoints. Email delivery works with Gmail when running on Render.
 
 >[!NOTE]
->Swagger's "Try it out" works best over HTTPS. Make sure to select the `https` schema in the Swagger UI.
+>Swagger's "Try it out" works best over HTTPS. Make sure to select the `https` schema in the Swagger UI. Rate limiting is enabled in production, restricting requests to **5 per minute per IP address** to prevent abuse.
 
->[!NOTE]
->Rate limiting is enabled in production, restricting requests to **5 per minute per IP address** to prevent abuse.
-
+>[!WARNING]
+>Due to the restrictions of Render's free plan, the app will regularly spin down with inactivity. Therefore, automatic emails may not be delivered at all times.
 
 ## Running the Project Locally
 You can run the app in two ways:
@@ -63,7 +62,7 @@ You will also need to:
 
 ## Environment Variables
 
-To run the app correctly, you must create a `.env` file in the project root. Below are the variables you need:
+To run the app correctly, you must provide environment variables for the project. Below are the variables you need:
 
 ### Weather API (required)
 
