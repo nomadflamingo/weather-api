@@ -8,6 +8,7 @@ import { buildUnsubscribeUrl } from '@lib/url';
  * Runs every hour. Filters hourly and daily subscriptions and sends weather updates.
  */
 export const startWeatherEmailJob = () => {
+  console.log("Cron job setup at:", new Date().toISOString());
   cron.schedule('0 * * * *', async () => {
     console.log('Running weather email job...');
 
