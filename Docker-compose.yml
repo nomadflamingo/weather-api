@@ -19,6 +19,9 @@ services:
       - '3000:3000'
     env_file:
       - .env
+    environment:
+      DATABASE_URL: postgres://weather_user:weather_pass@db:5432/weather_db
+      TZ: Ukraine/Kyiv
     command: >
       sh -c "
         until pg_isready -h db -p 5432; do
