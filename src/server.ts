@@ -32,7 +32,9 @@ app.get('/', (_req, res) => {
 });
 
 // Rate Limiter
-app.use(rateLimiter);
+if (process.env.NODE_ENV === 'production') {
+  app.use(rateLimiter);
+}
 
 // Main Routes
 app.use('/api/weather', weatherRoutes);
