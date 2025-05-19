@@ -46,6 +46,7 @@
     "node-cron": "^4.0.5",
     "nodemailer": "^7.0.3",
     "swagger-ui-express": "^5.0.1",
+    "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "uuid": "^11.1.0",
     "yamljs": "^0.3.0"
