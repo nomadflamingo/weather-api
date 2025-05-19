@@ -137,7 +137,8 @@ npm run dev
 - Jest for unit testing
 - Swagger for API docs
 - Node-cron for scheduled tasks
-- GitHub Actions for automated testing
+- GitHub Actions for automated unit testing
+- Postman Collections for quick manual API testing
 
 ## Project Structure
 ```
