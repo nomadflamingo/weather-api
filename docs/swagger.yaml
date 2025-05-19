@@ -10,8 +10,8 @@ tags:
   - name: "subscription"
     description: "Subscription management operations"
 schemes:
-  - "http"
   - "https"
+  - "http"
 paths:
   /weather:
     get:
