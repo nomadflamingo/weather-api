@@ -62,7 +62,7 @@ You will also need to:
 
 ## Environment Variables
 
-To run the app correctly, you must create a `.env` file in the project root. Below are the variables you need:
+To run the app correctly, you must provide environment variables for the project. Below are the variables you need:
 
 ### Weather API (required)
 
