@@ -3,7 +3,6 @@ info:
   description: "Weather API application that allows users to subscribe to weather updates for their city."
   version: "1.0.0"
   title: "Weather Forecast API"
-host: "weather-api-boxh.onrender.com"
 basePath: "/api"
 tags:
   - name: "weather"
@@ -56,8 +55,8 @@ paths:
       description: "Subscribe an email to receive weather updates for a specific city with chosen frequency."
       operationId: "subscribe"
       consumes:
-        - "application/json"
         - "application/x-www-form-urlencoded"
+        - "application/json"
       produces:
         - "application/json"
       parameters:
